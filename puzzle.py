@@ -53,20 +53,49 @@ class Puzzle:
         result_text_field.pack(side=LEFT)
 
         '''search'''
-        SEARCH_STRING = "ABC"
+        SEARCH_STRING = "SEARCH STRING IS" 
         
         '''search_rows'''
-        for i in xrange(0,PUZZLE_SIZE):
-            start_index = PUZZLE_ROWS[i].find(SEARCH_STRING)
-            if(start_index>-1):
-                for j in xrange(0,len(SEARCH_STRING)):
-                    PUZZLE_ITEM_CONTAINER[i][j].config(background="Yellow")
-                break
-
+        search_rows()
+     
         '''search_columns'''
             #TODO
 
-                    
+
+def get_spoken_word():
+    # obtain audio from the microphone
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Say something!")
+        audio = r.listen(source)
+
+    text = ""
+
+    # recognize speech using Google Speech Recognition
+    try:
+        # for testing purposes, we're just using the default API key
+        # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
+        # instead of `r.recognize_google(audio)`
+        print("You said " + r.recognize_google(audio))
+        text = r.recognize_google(audio)
+
+    except sr.UnknownValueError:
+        print("Could not understand audio")
+        text = Could not understand
+    except sr.RequestError as e:
+        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+    
+    return text
+
+def search_rows():
+    for i in xrange(0,PUZZLE_SIZE):
+        start_index = PUZZLE_ROWS[i].find(SEARCH_STRING)
+        if(start_index>-1):
+            for j in xrange(0,len(SEARCH_STRING)):
+                PUZZLE_ITEM_CONTAINER[i][j].config(background="Yellow")
+            break
+
+
 
 def main():            
     
