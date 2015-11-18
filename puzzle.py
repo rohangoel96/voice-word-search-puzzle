@@ -7,8 +7,8 @@ import ttk
 
 import speech_recognition as sr
 
-PUZZLE_SIZE = 3
-PUZZLE_ROWS = ["ABC","DEF","GHI"]
+PUZZLE_SIZE = 5
+PUZZLE_ROWS = ["DUCKP","OOLPA","GREEN","FGCMT","EDKLF"]
 PUZZLE_COLUMNS = [[] for i in range(0,PUZZLE_SIZE)]
 PUZZLE_ITEM_CONTAINER = [["*"]*PUZZLE_SIZE for i in range(0,PUZZLE_SIZE)]
 
@@ -22,6 +22,8 @@ class Puzzle:
     
     def __init__(self, master):    
     
+        SEARCH_STRING = "ERROR"
+
         '''header'''
         self.header_frame = ttk.Frame(master)
         self.header_frame.pack()
@@ -30,7 +32,7 @@ class Puzzle:
         self.voice_text_field = Entry(self.header_frame, width = 15)
         self.voice_text_field.pack(side=LEFT)
 
-        self.speak_button = ttk.Button(self.header_frame,text="SPEAK",command=lambda : self.speak_button_clicked)
+        self.speak_button = ttk.Button(self.header_frame,text="SPEAK" ,command = lambda : self.speak_button_clicked(SEARCH_STRING))
         self.speak_button.pack(side=LEFT)
 
 
@@ -52,25 +54,20 @@ class Puzzle:
         self.result_text_field = Entry(self.footer_frame, width = 10)
         self.result_text_field.pack(side=LEFT)
 
-        '''search'''
-        # SEARCH_STRING = "BE"
-        SEARCH_STRING = self.speak_button_clicked()
-        
+
+    def speak_button_clicked(self,SEARCH_STRING):
+        SEARCH_STRING = get_spoken_word().upper()
+        self.voice_text_field.delete(0,END)
+        self.voice_text_field.insert(0,SEARCH_STRING)
 
         '''search_rows'''
         self.row_search(SEARCH_STRING)
 
         '''search_columns'''
         self.column_search(SEARCH_STRING)
-
-    def speak_button_clicked(self):
-        SEARCH_STRING = get_spoken_word().upper()
-        self.voice_text_field.delete(0,END)
-        self.voice_text_field.insert(0,SEARCH_STRING)
-        return SEARCH_STRING
+        
 
     def row_search(self,SEARCH_STRING):
-
         for i in xrange(0,PUZZLE_SIZE):
             start_index = PUZZLE_ROWS[i].find(SEARCH_STRING)
             if(start_index>-1):
