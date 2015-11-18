@@ -14,9 +14,9 @@ print PUZZLE_ROWS
 print PUZZLE_COLUMNS
 PUZZLE_ITEM_CONTAINER = [["*"]*PUZZLE_SIZE for i in range(0,PUZZLE_SIZE)]
 
-for i in xrange(0, PUZZLE_SIZE):
-    for j in xrange(0,PUZZLE_SIZE):
-        PUZZLE_COLUMNS[j][i]=PUZZLE_ROWS[i][j]
+# for i in xrange(0, PUZZLE_SIZE):
+#     for j in xrange(0,PUZZLE_SIZE):
+#         PUZZLE_COLUMNS[j][i]=PUZZLE_ROWS[i][j]
 print PUZZLE_ROWS
 print PUZZLE_COLUMNS
 
@@ -53,11 +53,16 @@ class Puzzle:
         result_text_field.pack(side=LEFT)
 
         '''search'''
-        SEARCH_STRING = "SEARCH STRING IS" 
+        SEARCH_STRING = get_spoken_word() 
         
         '''search_rows'''
-        search_rows()
-     
+        for i in xrange(0,PUZZLE_SIZE):
+            start_index = PUZZLE_ROWS[i].find(SEARCH_STRING)
+            if(start_index>-1):
+                for j in xrange(0,len(SEARCH_STRING)):
+                    PUZZLE_ITEM_CONTAINER[i][j].config(background="Yellow")
+                break
+
         '''search_columns'''
             #TODO
 
@@ -81,21 +86,11 @@ def get_spoken_word():
 
     except sr.UnknownValueError:
         print("Could not understand audio")
-        text = Could not understand
+        text = "Could not understand"
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
     
     return text
-
-def search_rows():
-    for i in xrange(0,PUZZLE_SIZE):
-        start_index = PUZZLE_ROWS[i].find(SEARCH_STRING)
-        if(start_index>-1):
-            for j in xrange(0,len(SEARCH_STRING)):
-                PUZZLE_ITEM_CONTAINER[i][j].config(background="Yellow")
-            break
-
-
 
 def main():            
     
